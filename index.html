@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="./styles.css">
+    </head>
+
+    <body class="flex flex-gap">
+        <canvas width="1920 " height="1080"></canvas>
+        <div id="container" class="grid-cols-2 gap-sm padding-sm">
+            <div class="flex flex-gap-sm grid-col-span-2">
+                <button type="button" class="button" id="start">start</button>
+                <button type="button" class="button" id="stop">stop</button>
+            </div>
+            <div class="flex flex-gap-sm grid-col-span-2">
+                <button type="button" class="button" id="startRecording">start Recording</button>
+                <button type="button" class="button" id="stopRecording">stop Recording</button>
+            </div>
+            <div class="flex flex-gap-sm grid-col-span-2">
+                <span>Population: <span id="populationNum"></span></span>
+                <span>Recorder: <span id="recorder"></span></span>
+                <!--     <span>Poison: <span id="poisonNum"></span></span> -->
+            </div>
+            <template id="input-field">
+                <div class="flex flex-column flex-gap-sm">
+                    <label for=${id}>${id}</label>
+                    <input id=${id} min=${min} max=${max} step=${step} value="${value}" type="number" />
+                </div>
+            </template>
+        </div>
+        <script type="module" src="./index.js"></script>
+    </body>
+
+</html>
