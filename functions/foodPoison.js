@@ -103,28 +103,9 @@ class Ellipse {
             }
           }
         });
-    let friends = [];
-    for (let neighboor of neighboors) {
-      if (neighboor.mass < this.mass * 2 && neighboor.mass > this.mass / 2) {
-        friends.push(neighboor);
-      }
-      // if(neighboor)
-    }
-    this.shoalBehavior(friends);
-    // this.cohesion(friends);
-    // getRandomFloat() < 0.0001
-    //   ? this.shoalBehavior(friends)
-    //   : this.cohesion(friends);
-    // if (friends.length > 0) {
-    //   // console.log(friends);
-    //   this.shoal(friends);
-    // } else {
-    // this.wander(100);
-    // }
-    // }
-    // this.evolve(environment.population);
+    // this.cohesion(neighboors);
+    // this.shoalBehavior1(neighboors);
     this.boundaries(environment);
-    // this.limitToCanvas(environment);
   }
   calculateFitness() {
     let score = 0;
@@ -223,7 +204,7 @@ class Ellipse {
       }
     }
   }
-  shoalBehavior(neighbors) {
+  shoalBehavior1(neighbors) {
     neighbors.forEach((neighbor) => {
       if (Math.abs(this.energy - neighbor.energy) <= 5) {
         let alignmentForce = neighbor.velocity
@@ -267,7 +248,7 @@ class Ellipse {
 
     // Calculate center of mass of similar energy neighbors
     if (count > 0) {
-      sum.divide(count);
+      sum.div(count);
 
       // Steer towards the center of mass
       const desired = sum.copy().subtract(this.position);
@@ -276,107 +257,48 @@ class Ellipse {
       this.applyForce(steer);
     }
   }
-  // emulates the shoal behaviour
-  shoal(arr) {
-    // this.shoalList = arr;
-
-    // compute vectors
-    var separation = this.separate(arr, this.separationRange).limit(
-      this.maxForce
-    );
-    var alignment = this.align(arr).limit(this.maxForce);
-    var cohesion = this.cohesion(arr).limit(this.maxForce);
-    var affinity = this.affinity(arr);
-
-    // shoal with fishes of very different colors won't stay together as tightly as shoals of fishes of the same color
-    separation.multiply(1.2);
-    alignment.multiply(1.2 * affinity);
-    cohesion.multiply(1 * affinity);
-    // console.log(separation,)
-    // apply forces
-    // this.applyForce(separation);
-    this.applyForce(alignment);
-    // this.applyForce(cohesion);
-  }
-
-  // makes the fish separate from the surrounding fishes
-  separate(neighboors, range) {
-    var sum = new Vector(0, 0);
-
-    if (neighboors.length) {
-      for (var i in neighboors) {
-        var d = this.position.dist(neighboors[i].position);
-        if (d < range) {
-          var diff = this.position.copy().subtract(neighboors[i].position);
-          diff.normalize();
-          diff.div(d);
-          sum.add(diff);
+  shoalBehavior(neighbors) {
+    const energyThreshold = 5;
+    for (const neighbor of neighbors) {
+      if (neighbor !== this) {
+        const energyDifference = Math.abs(this.energy - neighbor.energy);
+        if (energyDifference >= energyThreshold) {
+          this.align(neighbor);
+          this.cohere(neighbor);
+          this.separate(neighbor);
         }
       }
-      sum.div(neighboors.length);
-      sum.normalize();
-      sum.multiply(this.maxSpeed);
-      sum.subtract(this.velocity);
-      sum.limit(this.maxForce);
     }
-
-    return sum;
   }
 
-  // aligns the fish to the surrounding fishes
-  align(neighboors) {
-    var sum = new Vector(0, 0);
+  align(neighbor) {
+    let alignmentForce = neighbor.velocity
+      .copy()
+      .normalize()
+      .multiply(this.maxForce);
+    this.applyForce(alignmentForce);
+  }
 
-    if (neighboors.length) {
-      for (var i in neighboors) {
-        sum.add(neighboors[i].velocity);
-      }
-      sum.div(neighboors.length);
-      sum.normalize();
-      sum.multiply(this.maxSpeed);
+  cohere(neighbor) {
+    let cohesionForce = neighbor.position
+      .copy()
+      .subtract(this.position)
+      .normalize()
+      .multiply(this.maxForce);
+    this.applyForce(cohesionForce);
+  }
 
-      sum.subtract(this.velocity).limit(this.maxSpeed);
+  separate(neighbor) {
+    if (this.position.dist(neighbor.position) < this.separationRange) {
+      let separationForce = this.position
+        .copy()
+        .subtract(neighbor.position)
+        .normalize()
+        .multiply(this.maxForce);
+      this.applyForce(separationForce);
     }
-
-    return sum;
   }
 
-  // moves the fish towards the center of the surrounding fishes
-  cohesion(neighboors) {
-    var sum = new Vector(0, 0);
-
-    if (neighboors.length) {
-      for (var i in neighboors) {
-        sum.add(neighboors[i].position);
-      }
-      sum.div(neighboors.length);
-      return this.seek(sum);
-    }
-
-    return sum;
-  }
-
-  // return a coeficient represanting the color affinity in a group of neighboor fishes
-  affinity(arr) {
-    var coef = 0;
-    for (var i in arr) {
-      var difference = Math.abs(arr[i].c - this.c) / 100;
-      if (difference > 0.5) difference = 1 - difference;
-      coef += difference;
-    }
-    var affinity = 1 - coef / arr.length;
-
-    return affinity * affinity;
-  }
-  // given a target vector, return a vector that would steer the fish in that direction
-  seek(target) {
-    var seek = target.copy().subtract(this.position);
-    seek.normalize();
-    seek.multiply(this.maxSpeed);
-    seek.subtract(this.velocity).limit(this.maxForce);
-
-    return seek;
-  }
   // wander behaviour (when the fish is alone, i.e. it can't see other neighboors around)
   wander(radius) {
     if (Math.random() < 0.05) {
