@@ -46,6 +46,15 @@ class Ellipse {
     ctx.fillStyle = `hsl(${this.c}, 100%, 50%)`;
     ctx.strokeStyle = `hsl(${this.c}, 100%, 50%)`;
     ctx.beginPath();
+    // ctx.ellipse(
+    //   this.position.x,
+    //   this.position.y,
+    //   this.r,
+    //   5,
+    //   Math.PI / 25,
+    //   0,
+    //   2 * Math.PI
+    // );
     ctx.arc(this.position.x, this.position.y, this.r, 0, 2 * Math.PI);
     ctx.closePath();
     ctx.fill();
@@ -103,8 +112,8 @@ class Ellipse {
             }
           }
         });
-    // this.cohesion(neighboors);
-    // this.shoalBehavior1(neighboors);
+    if (projectSetup.SHOAL === 1) this.cohesion(neighboors);
+    if (projectSetup.SHOAL === 2) this.shoalBehavior1(neighboors);
     this.boundaries(environment);
   }
   calculateFitness() {
@@ -205,6 +214,7 @@ class Ellipse {
     }
   }
   shoalBehavior1(neighbors) {
+    // console.log("shoal behavior");
     neighbors.forEach((neighbor) => {
       if (Math.abs(this.energy - neighbor.energy) <= 5) {
         let alignmentForce = neighbor.velocity
@@ -232,6 +242,7 @@ class Ellipse {
     });
   }
   cohesion(neighbors) {
+    // console.log("cohesion behavior");
     // Initialize variables
     let sum = new Vector(0, 0);
     let count = 0;

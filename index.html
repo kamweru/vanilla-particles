@@ -10,7 +10,11 @@
 
     <body class="flex flex-gap">
         <canvas width="1920 " height="1080"></canvas>
-        <div id="container" class="grid-cols-2 gap-sm padding-sm">
+        <div id="container" class="flex flex-column flex-gap-sm padding-sm">
+            <div class="flex flex-gap-sm grid-col-span-2 flex-align-center">
+                <span>Project</span>
+                <select title="project" id="project"></select>
+            </div>
             <div class="flex flex-gap-sm grid-col-span-2">
                 <button type="button" class="button" id="start">start</button>
                 <button type="button" class="button" id="stop">stop</button>
@@ -24,10 +28,63 @@
                 <span>Recorder: <span id="recorder"></span></span>
                 <!--     <span>Poison: <span id="poisonNum"></span></span> -->
             </div>
+            <div id="controls-box" class="flex flex-column flex-gap-sm"></div>
+            <div class="border rounded-sm">
+                <div class="flex flex-justify-space-between padding-xs">
+                    <span>Color Rules</span>
+                    <button>Randomize All</button>
+                </div>
+                <div class="border-top">
+                    <div class="flex flex-justify-space-between padding-xs">
+                        <div class="flex flex-gap-xs">
+                            <span class="color-box"></span>
+                            <span>Aqua</span>
+                            <span>-</span>
+                            <span>161</span>
+                        </div>
+                        <button>Randomize </button>
+                    </div>
+                    <div class="padding-sm border-top">
+                        <div class="flex flex-justify-space-between">
+                            <div class="flex flex-gap-xs">
+                                <span class="color-box"></span>
+                                <span>Aqua</span>
+                            </div>
+                            <input type="range" name="" id="">
+                            <span>0.3</span>
+                        </div>
+                    </div>
+                    <div class="padding-sm border-top">
+                        <div class="flex flex-justify-space-between">
+                            <div class="flex flex-gap-xs">
+                                <span class="color-box"></span>
+                                <span>Aqua</span>
+                            </div>
+                            <input type="range" name="" id="">
+                            <span>0.3</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <template id="input-field">
                 <div class="flex flex-column flex-gap-sm">
-                    <label for=${id}>${id}</label>
+                    <label for=${id}>${label}</label>
                     <input id=${id} min=${min} max=${max} step=${step} value="${value}" type="number" />
+                </div>
+            </template>
+            <template id="select-field">
+                <div class="flex flex-column flex-gap-sm">
+                    <label for=${id}>${label}</label>
+                    <select id=${id} value="${value}"></select>
+                </div>
+            </template>
+            <template id="range-field">
+                <div class="flex flex-column flex-gap-sm">
+                    <div class="flex flex-justify-space-between">
+                        <label for=${id}>${label}</label>
+                        <span id="${id}_amount">${value}</span>
+                    </div>
+                    <input type="range" id=${id} min=${min} max=${max} step=${step} value="${value}" />
                 </div>
             </template>
         </div>

@@ -1,0 +1,56 @@
+export const config = {
+  projects: {
+    list: [
+      { key: "foodPoison", title: "food vs Poison" },
+      { key: "particleSim", title: "particle Simulation" },
+      { key: "forceBased", title: "force Based" },
+    ],
+    inputs: {
+      foodPoison: {},
+      particleSim: {},
+      forceBased: [
+        {
+          label: "select color",
+          inputType: "select",
+          options: [
+            { label: "select color", value: "" },
+            ...[
+              { label: "SandyBrown", value: "#F4A460" },
+              { label: "LightSkyBlue", value: "#87CEFA" },
+              { label: "Turquoise", value: "#40E0D0" },
+              { label: "Cyan", value: "#00FFFF" },
+              { label: "MediumAquamarine", value: "#66CDAA" },
+              { label: "SpringGreen", value: "#00FF7F" },
+              { label: "Lime", value: "#00FF00" },
+              { label: "GreenYellow", value: "#ADFF2F" },
+              { label: "MediumSlateBlue", value: "#7B68EE" },
+              { label: "Purple", value: "#800080" },
+              { label: "Magenta", value: "#FF00FF" },
+              { label: "Violet", value: "#EE82EE" },
+              { label: "Gold", value: "#FFD700" },
+              { label: "Yellow", value: "#FFFF00" },
+              { label: "Orange", value: "#FFA500" },
+              { label: "DeepPink", value: "#FF1493" },
+              { label: "Pink", value: "#FFC0CB" },
+              { label: "Red", value: "#FF0000" },
+              { label: "crimson", value: "#e6194B" },
+              { label: "maroon", value: "#800000" },
+              { label: "teal", value: "#469990" },
+            ].sort((a, b) => a.label.localeCompare(b.label)),
+          ],
+          id: "selectColor",
+          value: "",
+        },
+        {
+          label: "Time Factor",
+          inputType: "range",
+          id: "timeFactor",
+          value: 0.475,
+          min: 0.1,
+          max: 0.9,
+          step: 0.01,
+        },
+      ],
+    },
+  },
+};
